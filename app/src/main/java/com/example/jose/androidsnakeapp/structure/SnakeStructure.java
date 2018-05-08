@@ -1,5 +1,5 @@
 package com.example.jose.androidsnakeapp.structure;
-
+import com.example.jose.androidsnakeapp.enumerators.GridType;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.example.jose.androidsnakeapp.enumerators.GridType;
+
 
 public class SnakeStructure extends View{
     private Paint ePaint = new Paint();

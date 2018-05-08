@@ -1,9 +1,9 @@
 package com.example.jose.androidsnakeapp.driver;
 
-import com.example.jose.snakeapp.enumerators.Direction;
-import com.example.jose.snakeapp.enumerators.GameCondition;
-import com.example.jose.snakeapp.enumerators.GridType;
-import com.example.jose.snakeapp.support.Coordinate;
+import com.example.jose.androidsnakeapp.enumerators.Direction;
+import com.example.jose.androidsnakeapp.enumerators.GameCondition;
+import com.example.jose.androidsnakeapp.enumerators.GridType;
+import com.example.jose.androidsnakeapp.support.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

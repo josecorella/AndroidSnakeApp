@@ -1,4 +1,4 @@
-package com.example.jose.snakeapp;
+package com.example.jose.androidsnakeapp;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
