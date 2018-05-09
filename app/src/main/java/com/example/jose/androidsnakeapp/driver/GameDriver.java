@@ -7,6 +7,7 @@ import com.example.jose.androidsnakeapp.support.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameDriver {
     public int GameWidth = 28;
@@ -20,8 +21,15 @@ public class GameDriver {
     private Direction currentDirection = Direction.Left;
     private GameCondition currentCondition = GameCondition.Running;
 
+    private GridType[][] gameMap;
 
-    public GameDriver() { }
+    private Coordinate food;
+    private boolean hasFood = false;
+
+
+    public GameDriver() {
+        gameMap = new GridType[GameWidth][GameHeight]; //two dimensional array with the size of the screen
+    }
     
     public void beginGame(){
         createSnake();
@@ -32,7 +40,6 @@ public class GameDriver {
         // check for wall collision - go through wall
         for (Coordinate c: walls) {
             if (snake.get(0).equals(c)) {
-                System.out.println(snake.get(0).getY());
                 if (c.getX() == GameWidth - 1) {
                     snake.get(0).setX(1);
                 }
@@ -48,7 +55,7 @@ public class GameDriver {
             }
         }
 
-        //collision check
+        //collision check - change condition to lost if snake head hits snake body
         for (Coordinate c: snake.subList(1, snake.size() - 1)) {
             if(snake.get(0).equals(c)){
                 currentCondition = GameCondition.Lost;
@@ -70,6 +77,22 @@ public class GameDriver {
                 updateDirection(-1, 0);
                 break;
         }
+
+        // creates food if food isn't already there / was eaten
+        if (!hasFood) {
+            createFood();
+        }
+
+        // detects if snake touches food
+        if (snake.get(0).equals(food)) {
+            hasFood = false;
+            // set food location to 0,0 while food randomizer is working
+            food.setX(0);
+            food.setY(0);
+            // increase snake length from eating food
+            snake.add(new Coordinate(snake.get(snake.size() -1).getX(), snake.get(snake.size() -1).getY()));
+        }
+
     }
 
     public void updateDirection(Direction newDirection){
@@ -81,13 +104,13 @@ public class GameDriver {
 
     //create a two dimensional array that will map out the game map with the enums we created
     public GridType[][] getMap(){
-        GridType[][] gameMap = new GridType[GameWidth][GameHeight]; //two dimensional array with the size of the screen
         //first set the grid to be empty
         for (int x = 0; x < GameWidth ; x++) {
             for (int y = 0; y < GameHeight; y++) {
                 gameMap[x][y] = GridType.Empty;
             }
         }
+
         for (Coordinate p : snake) {
             gameMap[p.getX()][p.getY()] = GridType.SnakeTail;
         }
@@ -97,6 +120,11 @@ public class GameDriver {
         for (Coordinate wall: walls) {  //for each loop //for each coordinate type object inside the size of the walls array
             gameMap[wall.getX()][wall.getY()] = GridType.Walls; //make the outside border of the two dimensional array a type enum Walls
         }
+
+        if (hasFood) {
+            gameMap[food.getX()][food.getY()] = GridType.Food;
+        }
+
         return gameMap; //return the now filled gameMap
     }
 
@@ -132,9 +160,19 @@ public class GameDriver {
         snake.add(new Coordinate(5, 7));
         snake.add(new Coordinate(4, 7));
         snake.add(new Coordinate(3, 7));
-
-
     }
+
+    // creates food in empty locations
+    private void createFood() {
+        Random random = new Random();
+        int newX = random.nextInt(26);
+        int newY = random.nextInt(40);
+        if (gameMap[newX][newY] == GridType.Empty) {
+            food = new Coordinate(newX, newY);
+            hasFood = true;
+        }
+    }
+
     public GameCondition getCurrentType(){
         return currentCondition;
     }
