@@ -29,6 +29,33 @@ public class GameDriver {
     }
 
     public void update(){
+        // check for wall collision - go through wall
+        for (Coordinate c: walls) {
+            if (snake.get(0).equals(c)) {
+                System.out.println(snake.get(0).getY());
+                if (c.getX() == GameWidth - 1) {
+                    snake.get(0).setX(1);
+                }
+                if (c.getX() == 0) {
+                    snake.get(0).setX(GameWidth - 2);
+                }
+                if (c.getY() == GameHeight - 1) {
+                    snake.get(0).setY(1);
+                }
+                if (c.getY() == 0) {
+                    snake.get(0).setY(GameHeight - 2);
+                }
+            }
+        }
+
+        //collision check
+        for (Coordinate c: snake.subList(1, snake.size() - 1)) {
+            if(snake.get(0).equals(c)){
+                currentCondition = GameCondition.Lost;
+            }
+        }
+
+        // update snake location
         switch (currentDirection){
             case Up:
                 updateDirection(0, -1);
@@ -43,15 +70,10 @@ public class GameDriver {
                 updateDirection(-1, 0);
                 break;
         }
-        //collision check
-        for (Coordinate c: walls) {
-            if(snake.get(0).equals(c)){
-                currentCondition = GameCondition.Lost;
-            }
-        }
     }
 
     public void updateDirection(Direction newDirection){
+        // cannot swipe the opposite direction
         if(Math.abs(newDirection.ordinal() - currentDirection.ordinal()) % 2 == 1){
             currentDirection = newDirection;
         }
