@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements OnTouchListener {
     private SnakeStructure snakeStructure;
 
     private final Handler handler = new Handler();
-    private final long delay= 150;
+    public static long delay= 150;
 
     private float prevXCoord, prevYCoord;
 

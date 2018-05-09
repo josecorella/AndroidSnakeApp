@@ -1,5 +1,6 @@
 package com.example.jose.androidsnakeapp.driver;
 
+import com.example.jose.androidsnakeapp.MainActivity;
 import com.example.jose.androidsnakeapp.enumerators.Direction;
 import com.example.jose.androidsnakeapp.enumerators.GameCondition;
 import com.example.jose.androidsnakeapp.enumerators.GridType;
@@ -25,6 +26,8 @@ public class GameDriver {
 
     private Coordinate food;
     private boolean hasFood = false;
+    private boolean speedUp = false;
+    private int score = 0;
 
 
     public GameDriver() {
@@ -91,8 +94,24 @@ public class GameDriver {
             food.setY(0);
             // increase snake length from eating food
             snake.add(new Coordinate(snake.get(snake.size() -1).getX(), snake.get(snake.size() -1).getY()));
+            score++;
         }
 
+        // every 5 points, the speed increase. the boolean is used so that it doesnt speed up constantly
+        if (score != 0 && score % 5 == 0 && !speedUp) {
+            MainActivity.delay -= 10;
+            speedUp = true;
+        }
+
+        // this means that the score has increased past a multiple of 5 and is ready to speed up at the next multiple of 5
+        if (score % 5 != 0) {
+            speedUp = false;
+        }
+
+        // make sure speed doesnt go too fast
+        if (MainActivity.delay <= 20) {
+            MainActivity.delay = 20;
+        }
     }
 
     public void updateDirection(Direction newDirection){
