@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Toast;
 
 import com.example.jose.androidsnakeapp.driver.GameDriver;
@@ -12,14 +13,15 @@ import com.example.jose.androidsnakeapp.enumerators.Direction;
 import com.example.jose.androidsnakeapp.enumerators.GameCondition;
 import com.example.jose.androidsnakeapp.structure.SnakeStructure;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
+public class MainActivity extends AppCompatActivity implements OnTouchListener {
     private GameDriver gameDriver;
     private SnakeStructure snakeStructure;
 
     private final Handler handler = new Handler();
-    private final long delay= 200;
+    private final long delay= 150;
 
-    private float prevXcoord, prevYcoord;
+    private float prevXCoord, prevYCoord;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,38 +59,34 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()){
+        switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                prevXcoord = event.getX();
-                prevYcoord = event.getY();
+                prevXCoord = event.getX();
+                prevYCoord = event.getY();
                 break;
-            case MotionEvent.ACTION_UP:
-                float newXcoord = event.getX();
-                float newYcoord = event.getY();
 
-                if(Math.abs(newXcoord -prevXcoord) > Math.abs(newYcoord - prevYcoord)){
-                    // left right
-                    if (newXcoord > prevXcoord){
-                        //right
+            case MotionEvent.ACTION_UP:
+                float newXCoord = event.getX();
+                float newYCoord = event.getY();
+
+                //where in screen did we swipe
+                if(Math.abs(newXCoord - prevXCoord) > Math.abs(newYCoord - prevYCoord)){
+                    //left - right movement
+                    if(newXCoord > prevXCoord){
                         gameDriver.updateDirection(Direction.Left);
-                    }else{
-                        //left
+                    } else{
                         gameDriver.updateDirection(Direction.Right);
                     }
-                } else{
-                    if(newYcoord > prevYcoord){
-                        //up
+
+                } else {
+                    if(newYCoord > prevYCoord){
                         gameDriver.updateDirection(Direction.Down);
                     } else{
-                        //down
                         gameDriver.updateDirection(Direction.Up);
                     }
                 }
-                break;
-
-
-
         }
         return true;
     }
 }
+
